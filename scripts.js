@@ -948,12 +948,16 @@ async function borrar_nota(event, modo){
         minimizar_nota(target, nota_actual);
     }
     
-    // elimino nota de variable "notas"
-    let posicion = nota_actual.id.slice(5,);
-    notas.libros[nombre_libro_actual].splice(posicion, 1); // elimino nota
-    
-    // salvo variable en cache navegador
-    window.localStorage.setItem('app_notas_libros', JSON.stringify(notas));
+    // elimino nota de variable "notas", solo si no es una nota nueva (que aún no había sido guardada)
+    if (nota_esnueva == false){
+        let posicion = nota_actual.id.slice(5,);
+        notas.libros[nombre_libro_actual].splice(posicion, 1); // elimino nota
+        
+        // salvo variable en cache navegador
+        window.localStorage.setItem('app_notas_libros', JSON.stringify(notas));
+    } else {
+        nota_esnueva = false; // restauro variable a 'false'
+    }
     
     // elimino div nota, reseteo modo eliminar
     setTimeout(()=>{
