@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="2.1503963mm"
+   height="18mm"
+   viewBox="0 0 2.1503963 18"
+   version="1.1"
+   id="svg2667"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2664">
+    <linearGradient
+       id="linearGradient31162"
+       gradientTransform="matrix(3.5850509e-7,0,0,2.7982889e-7,-202.3262,-293.15987)">
+      <stop
+         style="stop-color:#7293d7;stop-opacity:1;"
+         offset="0"
+         id="stop31160" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-132.57976,-135.09476)">
+    <path
+       id="path66457"
+       style="vector-effect:none;fill:none;fill-rule:evenodd;stroke:#d77272;stroke-width:0.582099;stop-color:#000000;stroke-opacity:1"
+       d="M 133.62724,152.5832 V 135.50196" />
+  </g>
+</svg>

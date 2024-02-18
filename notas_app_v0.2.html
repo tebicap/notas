@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="marginpading_cero fuente">
+<head>
+    <!-- AUTOR: Esteban C. -->
+    <!-- tebicap@gmail.com -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="estilos.css">
+    <script src="scripts.js"></script>
+    <!--  IPFS  -->
+<!--     <script src="https://cdn.jsdelivr.net/npm/ipfs@0.65.1-a77e40cc.0/dist/index.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs@0.65.0/dist/index.min.js" onerror="scriptalt('ipfs')"></script> <!-- js-ipfs -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" onerror="scriptalt('crypto')"></script> <!--  CRYPTO library (reemplazar por script local?)  -->
+    <title>Notas</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📌</text></svg>">
+</head>
+<body class="marginpading_cero" onload="setTimeout(inicializarApp(),300)">
+<div class="aclara_fondo no_scrollbars marginpading_cero">
+
+    <!--    ENCABEZADO  -->
+    <section class="header marginpading_cero">
+        <div class="items_header">
+            <img class="nombreapp marginpading_cero fuente" src="imagenes/logoapp.svg"/>
+            <img class="menuapp_gear" onclick="abremenu()" src="imagenes/menuapp.svg"/>
+        </div>
+        <div id="status" class="status"></div>
+    </section>
+    
+    <!--    CUERPO  -->
+    <section class="main no_scrollbars">
+        <!-- NOTAS -->
+        <div id="notas_contenedor" class="notas_contenedor">
+            <div class="notas_encabezado_contenedor">
+                <img class="encabezado_libro_icono" src="imagenes/encabezado_libro.svg"/>
+                <span class="notas_libro fuente">libro</span>
+                <span class="notas_titulo fuente">No hay libros en la biblioteca</span>
+                <img class="notas_biblioteca" onclick="mostrar_biblioteca()" src="imagenes/nota_encabezado_biblioteca.svg"/>
+                <img class="notas_nueva_nota" onclick="agregar_nota(this);" src="imagenes/nota_encabezado_plus.svg"/>
+            </div>
+            
+            <!-- lineamovernotas -->
+            <div id="indicador_movernota" class="indicador_movernota"></div>
+            
+            <!-- notas -->
+            <div class="nota notamodelo" id="notamodelo">
+                <img class="arrastre" src="imagenes/arrastre.svg"/>
+                <div class="nota_txt fuente no_scrollbars" onclick="tachar(event)">Nota modelo</div>
+                <img class="nota_masbotones" onclick="masbotones(event.target, 'expandir')" src="imagenes/nota_masbotones.svg"/>
+                <div class="nota_botones">
+                    <img onclick="masbotones(event.target, 'contraer')" src="imagenes/nota_boton_menosbotones.svg"/>
+                    <img onclick="borrar_nota(event)" src="imagenes/nota_boton_borrar.svg"/>
+                        <img src="imagenes/botones_separador_barravert.svg" class="oculto"/>
+                    <img src="imagenes/nota_boton_paste.svg" class="oculto"/>
+                        <img src="imagenes/botones_separador_barravert.svg"/>
+                    <img src="imagenes/nota_boton_copy.svg" onclick="copiar_a_portapapeles('nota')"/>
+                        <img src="imagenes/botones_separador_barravert.svg"/>
+                    <img onclick="expandir_nota_edicion(event);" src="imagenes/nota_boton_edit.svg"/>
+                </div>
+                <div class="nota_botones_edicion">
+                    <img onclick="borrar_nota(event, 'modoedicion')" src="imagenes/nota_boton_borrar.svg"/>
+                    <img onclick="deshacer_edicionnota(event)" src="imagenes/nota_boton_deshacer.svg"/>
+                    <div class=""></div> <!--separador-->
+                    <img onclick="confirmar_nota(event.target)" src="imagenes/nota_boton_confirmar.svg"/>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BIBLIOTECA -->
+        <div id="biblioteca_contenedor" class="biblioteca_contenedor">
+            <div class="biblioteca_header">
+                <img class="encabezado_biblioteca_icono" src="imagenes/encabezado_biblioteca.svg"/>
+                <span class="biblioteca_biblioteca fuente">biblioteca</span>
+                <span class="biblioteca_descripcion fuente">Presiona el título para editarlo, o el libro para abrirlo.</span>
+                <img class="biblioteca_enviar_boton" src="imagenes/biblioteca_boton_enviar.svg" onclick="enviar_libro()"/>
+                <img class="biblioteca_eliminarlibro_boton" onclick="habilitaeliminar()" src="imagenes/biblioteca_encabezado_cruz.svg"/>
+                
+            </div>
+            <div class="biblioteca_libros_contenedor">
+                <div class="biblioteca_libro libro_modelo"> <!-- Este es para añadir libro nuevo! -->
+                    <img class="biblioteca_libro_icono" onclick="nuevolibro()" src="imagenes/biblioteca_nuevo.svg"/>
+                    <span class="biblioteca_eliminar" onclick="eliminar_libro(nombrelibro)">x</span>
+                    <span class="biblioteca_titulo_libro">crear Nuevo</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!--    ESCRITURA LIBRE  -->
+    <section class="escritura_libre marginpading_cero">
+        <div class="escritura_libre_encabezado">
+            <span class="escritura_libre_leyenda fuente">Escritura libre</span>
+            <img onclick="escrituralibre_minimiza()" class="escritura_libre_mini-maxi marginpading_cero" src="imagenes/escrituralibre_boton_minimizar.svg"/>
+        </div>
+        <textarea id="copiame" class="escritura_libre_escritura no_scrollbars fuente" placeholder="Escribe algo, puedes luego copiarlo o enviarlo a otro dispositivo (ej. del teléfono al computador). Usa los botones de abajo."></textarea>
+        <div class="escritura_libre_botones">
+            <img class="elb_borrar" onclick="escrituralibre_borrar()" src="imagenes/nota_boton_borrar.svg"/>
+                <img class="oculto" src="imagenes/botones_separador_barravert.svg"/>
+            <img class="elb_paste oculto" onclick="escrituralibre_pegar_prueba()" src="imagenes/nota_boton_paste.svg"/>
+                <img src="imagenes/botones_separador_barravert.svg"/>
+            <img class="elb_copy" onclick="copiar_a_portapapeles('escrituralibre')" src="imagenes/nota_boton_copy.svg"/>
+                <img src="imagenes/botones_separador_barravert.svg"/>
+            <img class="elb_enviar" onclick="enviar_mensaje()" src="imagenes/escrituralibre_boton_enviar.svg"/>
+        </div>
+    </section>
+    
+    <!--    PIE  -->
+    <section class="footer marginpading_cero">
+        <p><a class="donar_link" href="https://bafybeiarjzlvjib7iuasknqrinhxihzoy43oolgg5fpsq2dtj7ogavg74a.ipfs.cf-ipfs.com/Selec.html">Donar con tarjeta o bitcoin⚡</a></p>
+    </section>
+    
+    <!-- MENSAJES -->
+    <div class="mensajes">
+        <p class="mensajes_texto" ></p>
+        <div class="mensajes_contenedor_botones">
+            <textarea class="textarea_palabrasclave" height="2" placeholder="escribe al menos 5 palabras clave (puedes usar una frase sencilla)"></textarea>
+            <div class="mensajes_eligecontactoconocido">O elige un contacto conocido:</div>
+            <div class="contactos_contenedor">
+                <div class="contacto contacto_add">+</div><div class="contacto">User1</div><div class="contacto">User1</div><div class="contacto contacto_presionado">User3</div><div class="contacto contacto_remove">-</div>
+            </div>
+            <div class="libros_contenedor oculto">
+                <div class="libro_lista">Libro modelo</div>
+            </div>
+            <div class="mensajes_contenedor_botones_accion">
+            </div>
+            <!--<div class="mensajes_si" onclick="confirmacion(true)">SI</div> -->
+            <div class="mensajes_contenedor_para_cancel">
+                <!--<div class="mensajes_no" onclick="confirmacion(false)">CANCEL</div>-->
+            </div>
+        </div>
+    </div>
+    
+    <!-- MENU lateral -->
+    <div class="menu_lateral">
+        <div class="menu_lateral_contenido">
+            <ul>
+                <li>Tema de color: <input id="selector_color_app" onchange="set_color_app(this.value)" name="Color Picker" type="color"/>
+                <a class="menu_resetcolor" onclick="set_color_app(estadoapp.acento_reset)">reset</a>
+                </li>
+                <li class="invisible"></li>
+                <li>proximamente... Hacer backup de todas las notas</li>
+                <li>proximamente... sincronizar libros con otro navegador o dispositivo</li>
+                <li class="invisible"></li>
+                <li>proximamente... Quitar personalizaciones de app (tema de color, etc. Mantiene libros y notas intactas)</li>
+                <li>proximamente... Eliminar todos los datos de la app (Esto borra todos los libros y las preferencias de la app)</li>
+                <li class="invisible"></li>
+                <li>proximamente... Consultar novedades de la app</li>
+                <li>proximamente... Envía un mensaje al desarrollador</li>
+            </ul>
+        </div>
+        <div class="menu_haciaengranaje"></div>
+    </div>
+</div>
+<script>
+    function scriptalt(cualscript){
+      //scripts alternativos LOCALES
+      if (cualscript == "ipfs"){
+        var script = document.createElement('script');
+        script.src = "ipfs.js";
+        document.body.appendChild(script);
+        console.log(script);
+      } else if (cualscript == "crypto"){
+        var script = document.createElement('script');
+        script.src = "crypto-js.min.js";
+        document.body.appendChild(script);
+        console.log(script);
+      }
+    }
+</script>
+</body>
+</html>
