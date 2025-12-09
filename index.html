@@ -18,7 +18,9 @@
 <body class="marginpading_cero" onload="setTimeout(inicializarApp(),300)">
     <!-- instalación service worker para uso ofline -->
     <script>
-    navigator.serviceWorker.register('./serviceworker.js');
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./serviceworker.js');
+        }
     </script>
 
 <div class="aclara_fondo no_scrollbars marginpading_cero">
@@ -159,17 +161,19 @@
 <script>
     function scriptalt(cualscript){
       //scripts alternativos LOCALES
-      if (cualscript == "ipfs"){
-        var script = document.createElement('script');
-        script.src = "ipfs.js";
-        document.body.appendChild(script);
-        console.log(script);
-      } else if (cualscript == "crypto"){
-        var script = document.createElement('script');
-        script.src = "crypto-js.min.js";
-        document.body.appendChild(script);
-        console.log(script);
-      }
+        try {
+          if (cualscript == "ipfs"){
+            var script = document.createElement('script');
+            script.src = "ipfs.js";
+            document.body.appendChild(script);
+            console.log(script);
+          } else if (cualscript == "crypto"){
+            var script = document.createElement('script');
+            script.src = "crypto-js.min.js";
+            document.body.appendChild(script);
+            console.log(script);
+          }
+        } catch (error) { alert("error: " + error);}
     }
 </script>
 </body>
