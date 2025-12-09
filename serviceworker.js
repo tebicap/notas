@@ -1,4 +1,4 @@
-CACHE_NAME = 'v2'; //caché actualizado para que cargue archivos como nuevos
+CACHE_NAME = 'v3'; //caché actualizado para que cargue archivos como nuevos
 
 const ASSETS = [
         './',           // index.html
