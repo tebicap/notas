@@ -1,7 +1,6 @@
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open('v1').then(c =>
-      c.addAll([
+CACHE_NAME = 'v2'; //caché actualizado para que cargue archivos como nuevos
+
+const ASSETS = [
         './',           // index.html
         './estilos.css',
         './scripts.js',
@@ -31,13 +30,44 @@ self.addEventListener('install', e => {
         './imagenes/nota_boton_confirmar.svg',
         './imagenes/nota_boton_menosbotones.svg',
         './imagenes/nota_masbotones.svg'
-      ])
-    )
+];
+
+// INSTALACIÓN
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(resp => resp || fetch(e.request))
+// ACTIVACIÓN (limpia cachés viejos)
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(k => k !== CACHE_NAME)
+          .map(k => caches.delete(k))
+      )
+    )
+  );
+  self.clients.claim();
+});
+
+// FETCH
+self.addEventListener('fetch', event => {
+  const req = event.request;
+
+  // 1) NAVEGACIÓN (HTML) → network-first
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      fetch(req).catch(() => caches.match('./'))
+    );
+    return;
+  }
+
+  // 2) RESTO → cache-first
+  event.respondWith(
+    caches.match(req).then(r => r || fetch(req))
   );
 });
