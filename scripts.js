@@ -1,4 +1,4 @@
-alert("HOLA! estoy en script.js");
+alert("HOLA! ...estoy en script.js");
 // estatus variables
 var escrituralibre = true; // escritura libre desplegada
 var eliminarlibros = "none"; // no se muestra globito para eliminar libro
