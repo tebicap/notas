@@ -18,50 +18,15 @@
 <body class="marginpading_cero">
     <!-- instalación service worker para uso ofline -->
     <script>
-    if ('serviceWorker' in navigator) {
-
-      //alert("Registrando service worker…");
-
-      navigator.serviceWorker.register('./serviceworker.js')
-        .then(reg => {
-
-          //alert("SW registrado.");
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./serviceworker.js');
 
           // Cuando cambia el SW → recargar
           navigator.serviceWorker.addEventListener('controllerchange', () => {
-            //alert("Nuevo service worker activo → recargando");
             window.location.reload();
           });
-
-          // Si hay uno esperando → activarlo ya
-          if (reg.waiting) {
-            //alert("SW en espera → activando");
-            reg.waiting.postMessage({ action: 'skipWaiting' });
-          }
-
-          // Detectar si hay uno nuevo descargado
-          reg.addEventListener('updatefound', () => {
-            console.log("Nueva versión del SW encontrada…");
-            const newSW = reg.installing;
-
-            newSW.addEventListener('statechange', () => {
-              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log("Nuevo SW instalado → activando skipWaiting");
-                newSW.postMessage({ action: 'skipWaiting' });
-              }
-            });
-          });
-
-        })
-        .catch(err => {
-          alert("Error registrando SW: " + err);
-        });
-
-    } else {
-      //alert("Service workers NO soportados");
-    }
+        }
     </script>
-
 
 <div class="aclara_fondo no_scrollbars marginpading_cero">
 

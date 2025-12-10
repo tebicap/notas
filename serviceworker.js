@@ -1,4 +1,4 @@
-CACHE_NAME = 'v5'; //caché actualizado para que cargue archivos como nuevos
+CACHE_NAME = 'v7'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
 
 const ASSETS = [
         './',           // index.html
@@ -56,18 +56,12 @@ self.addEventListener('activate', event => {
 
 // FETCH
 self.addEventListener('fetch', event => {
-  const req = event.request;
-
-  // 1) NAVEGACIÓN (HTML) → network-first
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(() => caches.match('./'))
-    );
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request).catch(() => caches.match('/index.html')));
     return;
   }
 
-  // 2) RESTO → cache-first
-  event.respondWith(
-    caches.match(req).then(r => r || fetch(req))
-  );
+  if (ASSETS.includes(new URL(event.request.url).pathname)) {
+    event.respondWith(caches.match(event.request).then(r => r || fetch(event.request)));
+  }
 });
