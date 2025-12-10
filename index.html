@@ -15,38 +15,38 @@
     <title>Notas</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📌</text></svg>">
 </head>
-<body class="marginpading_cero" onload="setTimeout(inicializarApp(),300)">
+<body class="marginpading_cero">
     <!-- instalación service worker para uso ofline -->
     <script>
     if ('serviceWorker' in navigator) {
 
-      alert("Registrando service worker…");
+      //alert("Registrando service worker…");
 
       navigator.serviceWorker.register('./serviceworker.js')
         .then(reg => {
 
-          alert("SW registrado.");
+          //alert("SW registrado.");
 
           // Cuando cambia el SW → recargar
           navigator.serviceWorker.addEventListener('controllerchange', () => {
-            alert("Nuevo service worker activo → recargando");
+            //alert("Nuevo service worker activo → recargando");
             window.location.reload();
           });
 
           // Si hay uno esperando → activarlo ya
           if (reg.waiting) {
-            alert("SW en espera → activando");
+            //alert("SW en espera → activando");
             reg.waiting.postMessage({ action: 'skipWaiting' });
           }
 
           // Detectar si hay uno nuevo descargado
           reg.addEventListener('updatefound', () => {
-            alert("Nueva versión del SW encontrada…");
+            console.log("Nueva versión del SW encontrada…");
             const newSW = reg.installing;
 
             newSW.addEventListener('statechange', () => {
               if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                alert("Nuevo SW instalado → activando skipWaiting");
+                console.log("Nuevo SW instalado → activando skipWaiting");
                 newSW.postMessage({ action: 'skipWaiting' });
               }
             });
@@ -58,7 +58,7 @@
         });
 
     } else {
-      alert("Service workers NO soportados");
+      //alert("Service workers NO soportados");
     }
     </script>
 
@@ -198,24 +198,27 @@
         <div class="menu_haciaengranaje"></div>
     </div>
 </div>
-<script>
-    function scriptalt(cualscript){
-      //scripts alternativos LOCALES
-        try {
-          if (cualscript == "ipfs"){
-            var script = document.createElement('script');
-            script.src = "ipfs.js";
-            document.body.appendChild(script);
-            console.log(script);
-          } else if (cualscript == "crypto"){
-            var script = document.createElement('script');
-            script.src = "crypto-js.min.js";
-            document.body.appendChild(script);
-            console.log(script);
-          }
-        } catch (error) { alert("error: " + error);}
-    }
-    alert("dentro html");
-</script>
+    <script>
+        function scriptalt(cualscript){
+          //scripts alternativos LOCALES
+            try {
+              if (cualscript == "ipfs"){
+                var script = document.createElement('script');
+                script.src = "ipfs.js";
+                document.body.appendChild(script);
+                console.log(script);
+              } else if (cualscript == "crypto"){
+                var script = document.createElement('script');
+                script.src = "crypto-js.min.js";
+                document.body.appendChild(script);
+                console.log(script);
+              }
+            } catch (error) { alert("error: " + error);}
+        }
+    </script>
+    <script>
+        //inicializo app general
+        inicializarApp();
+    </script>
 </body>
 </html>
