@@ -1,4 +1,4 @@
-CACHE_NAME = 'v8'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
+CACHE_NAME = 'v9'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
 
 const ASSETS = [
         './',           // index.html
@@ -57,7 +57,7 @@ self.addEventListener('activate', event => {
 // FETCH
 self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate') {
-    event.respondWith(fetch(event.request).catch(() => caches.match('./index.html')));
+    event.respondWith(fetch(event.request).catch(() => caches.match('./')));
     return;
   }
 
