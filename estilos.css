@@ -816,7 +816,7 @@ body {
 }
 
 .boton-instalar {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 1;
     margin: 0px 0px 0px 7px;

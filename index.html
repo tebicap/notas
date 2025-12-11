@@ -35,7 +35,7 @@
     <!--    ENCABEZADO  -->
     <section class="header marginpading_cero">
         <div class="items_header">
-            <button id="btnInstalar" class="boton-instalar" style="display:none;">Instalar app</button>
+            <button id="btnInstalar" class="boton-instalar">Instalar app</button>
             <img class="nombreapp marginpading_cero fuente" src="imagenes/logoapp.svg"/>
             <img class="menuapp_gear" onclick="abremenu()" src="imagenes/menuapp.svg"/>
         </div>
@@ -187,31 +187,38 @@
 
     <!-- script de instalación de app -->
     <script>
-    let deferredPrompt;
-    const btn = document.getElementById('btnInstalar');
-    //IOS -- Detectar iPhone/iPad
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        const installBtn = document.getElementById('installBtn');
+        let deferredPrompt = null;
 
-    if (isIOS) {
-      document.getElementById('btnInstalar').style.display = 'block';
-    }
-    // ANDROID: beforeinstallprompt
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btn.style.display = "block";
-    });
-    btn.addEventListener('click', async () => {
-      // ANDROID
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        return;
-      }
-      // iPHONE
-      alert("En iPhone: Compartir → 'Agregar a pantalla de inicio'.");
-    });
+        // 1. Captura evento en Android/Chrome
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          // El botón ya está visible por defecto
+        });
+
+        // 2. Click para instalar (Android/Chrome)
+        installBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+          } else {
+            // iPhone u otros → mostrar instrucciones
+            alert('Para instalar, abre el menú del navegador y toca "Agregar a pantalla principal".');
+          }
+        });
+
+        // 3. Ocultar botón si YA ESTÁ INSTALADA
+        // **Android / Chrome / Windows**
+        window.addEventListener('appinstalled', () => {
+          installBtn.style.display = 'none';
+        });
+
+        // **iPhone** detecta modo standalone
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+          installBtn.style.display = 'none';
+        }
     </script>
 
     <!-- inicializo app general -->
