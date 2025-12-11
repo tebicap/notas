@@ -199,7 +199,7 @@
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       deferredPrompt = e;
-      btn.style.display = "block !important";
+      btn.style.display = "block";
     });
     btn.addEventListener('click', async () => {
       // ANDROID
