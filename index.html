@@ -30,38 +30,12 @@
         }
     </script>
 
-    <!-- botón y script de instalación de app -->
-    <button id="btnInstalar" style="display:none;">Instalar app</button>
-    <script>
-    let deferredPrompt;
-    const btn = document.getElementById('btnInstalar');
-
-    // ANDROID: beforeinstallprompt
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btn.style.display = "block";
-    });
-
-    btn.addEventListener('click', async () => {
-      // ANDROID
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        return;
-      }
-
-      // iPHONE
-      alert("En iPhone: Compartir → 'Agregar a pantalla de inicio'.");
-    });
-    </script>
-
 <div class="aclara_fondo no_scrollbars marginpading_cero">
 
     <!--    ENCABEZADO  -->
     <section class="header marginpading_cero">
         <div class="items_header">
+            <button id="btnInstalar" class="boton-instalar" style="display:none;">Instalar app</button>
             <img class="nombreapp marginpading_cero fuente" src="imagenes/logoapp.svg"/>
             <img class="menuapp_gear" onclick="abremenu()" src="imagenes/menuapp.svg"/>
         </div>
@@ -210,8 +184,32 @@
             } catch (error) { console.log("error: " + error);}
         }
     </script>
+
+    <!-- script de instalación de app -->
     <script>
-        //inicializo app general
+    let deferredPrompt;
+    const btn = document.getElementById('btnInstalar');
+    // ANDROID: beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      btn.style.display = "block";
+    });
+    btn.addEventListener('click', async () => {
+      // ANDROID
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        return;
+      }
+      // iPHONE
+      alert("En iPhone: Compartir → 'Agregar a pantalla de inicio'.");
+    });
+    </script>
+
+    <!-- inicializo app general -->
+    <script>
         inicializarApp();
     </script>
 </body>

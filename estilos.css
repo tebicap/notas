@@ -814,3 +814,14 @@ body {
     60%      { opacity: 1; }
     100%    { margin-top: -60px; opacity: 0; }
 }
+
+.boton-instalar {
+    position: absolute;
+    z-index: 1;
+    margin: 0px 0px 0px 7px;
+    padding: 4px;
+    border-radius: 3px;
+    border: 0px;
+    background-color: #98B0E2;
+    color: white;
+}
