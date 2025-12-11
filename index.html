@@ -189,11 +189,17 @@
     <script>
     let deferredPrompt;
     const btn = document.getElementById('btnInstalar');
+    //IOS -- Detectar iPhone/iPad
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    if (isIOS) {
+      document.getElementById('btnInstalar').style.display = 'block';
+    }
     // ANDROID: beforeinstallprompt
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       deferredPrompt = e;
-      btn.style.display = "block";
+      btn.style.display = "block !important";
     });
     btn.addEventListener('click', async () => {
       // ANDROID
