@@ -1,4 +1,4 @@
-CACHE_NAME = 'v12'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
+CACHE_NAME = 'v13'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
 
 const ASSETS = [
         './',
@@ -7,6 +7,8 @@ const ASSETS = [
         './scripts.js',
         './fuente/OpenSans.woff2',
         //imágenes:
+        './imagenes/icono_instalada_192.png',
+        './imagenes/icono_instalada_512.png',
         './imagenes/arrastre.svg',
         './imagenes/biblioteca_nuevo.svg',
         './imagenes/escrituralibre_boton_enviar.svg',
