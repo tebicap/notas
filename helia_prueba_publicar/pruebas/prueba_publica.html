@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- AUTOR: Esteban C. -->
+    <!-- tebicap@gmail.com -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!--  IPFS  -->
+    <script src="helia1.3.10_min.js" onerror="alert('no se puedo cargar HELIA')"></script> <!-- js-ipfs -->
+    
+    <title>Publica ipfs</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
+</head>
+<body>
+<h1>Publica</h1>
+<span>ESTADO: </span><p id="estado">...</p>
+
+<script type="text/javascript">
+    function status(status){
+        document.getElementById("estado").innerHTML = status;
+    }
+
+    async function nodo(){
+
+        try{
+            const helia = await createHelia()
+            // the node is running
+        } catch (error) {
+            console.log("Ocurrió un error:\n"+error)
+        }
+
+        status("nodo iniciado");
+
+        // await helia.stop()
+        // the node is stopped
+    }
+
+    status("cargando nodo");
+
+    nodo();
+
+    status("ya");
+
+</script>
+</body>
+</html>
