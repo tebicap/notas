@@ -1761,6 +1761,6 @@ async function nodo_desconectar(){
 //// petición de persistencia al anvegador 
 async function aseguraPersistencia(){
     if (navigator.storage?.persist){
-        await navigator.storage.persist().then(persistencia => {alert('persistencia?: ' + persistencia)});
+        await navigator.storage.persist().then(persistencia => {console.log('persistencia?: ' + persistencia)});
 }
 }
