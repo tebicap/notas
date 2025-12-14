@@ -1742,15 +1742,15 @@ async function nodo_conectar(){
         console.log("a crear nodo, improtando");
             
         //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
-        import { createHelia } from 'helia'
-        import { unixfs } from '@helia/unixfs'
-        import { createLibp2p } from 'libp2p'
-        import { webSockets } from '@libp2p/websockets'
-        import { webRTC } from '@libp2p/webrtc'
-        import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
-        import { noise } from '@chainsafe/libp2p-noise'
-        import { yamux } from '@chainsafe/libp2p-yamux'
-        import { identify } from '@libp2p/identify'
+        import { createHelia } from 'helia';
+        import { unixfs } from '@helia/unixfs';
+        import { createLibp2p } from 'libp2p';
+        import { webSockets } from '@libp2p/websockets';
+        import { webRTC } from '@libp2p/webrtc';
+        import { circuitRelayTransport } from '@libp2p/circuit-relay-v2';
+        import { noise } from '@chainsafe/libp2p-noise';
+        import { yamux } from '@chainsafe/libp2p-yamux';
+        import { identify } from '@libp2p/identify';
 
 
         console.log("todo importado");
