@@ -1,4 +1,4 @@
-CACHE_NAME = 'v3'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
+CACHE_NAME = 'v4'; // actualizar nro cada vez que actualizo otros archivos para que los recargue
 
 const ASSETS = [
         './',

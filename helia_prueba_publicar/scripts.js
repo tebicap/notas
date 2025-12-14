@@ -1,12 +1,3 @@
-            
-        //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
-        const { createHelia } = await import('./libs/Helia_6.0.13_min.js');
-        const { unixfs } = await import('./libs/unixfs_6.0.4_min.js');
-        const { createLibp2p } = await import('./libs/libp2p_3.1.2_min.js');
-        const { webRTC } = await import('./libs/webrtc_6.0.10_min.js');
-        const { circuitRelayTransport } = await import('./libs/circuitrelay_4.1.2_min.js');
-        const { noise } = await import('./libs/libp2pnoise_17.0.0_min.js');
-        const { yamux } = await import('./libs/libp2pyamux_8.0.1_min.js');
 // estatus variables
 var escrituralibre = true; // escritura libre desplegada
 var eliminarlibros = "none"; // no se muestra globito para eliminar libro
@@ -1749,6 +1740,17 @@ async function nodo_conectar(){
     // creo nodo
     if (nodo === null) { // creo nodo si no está creado
         console.log("a crear nodo, improtando");
+            
+        //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
+        import { createHelia } from 'helia'
+        import { unixfs } from '@helia/unixfs'
+        import { createLibp2p } from 'libp2p'
+        import { webSockets } from '@libp2p/websockets'
+        import { webRTC } from '@libp2p/webrtc'
+        import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
+        import { noise } from '@chainsafe/libp2p-noise'
+        import { yamux } from '@chainsafe/libp2p-yamux'
+        import { identify } from '@libp2p/identify'
 
 
         console.log("todo importado");
