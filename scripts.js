@@ -1756,3 +1756,11 @@ async function nodo_desconectar(){
     
     barra_notificar("statusnormal"); // Status quitar animaciones
 }
+
+
+//// petición de persistencia al anvegador 
+async function aseguraPersistencia(){
+    if (navigator.storage?.persist){
+        await navigator.storage.persist().then(persistencia => {alert('persistencia?: ' + persistencia)});
+}
+}
