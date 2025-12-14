@@ -1739,6 +1739,7 @@ async function nodo_conectar(){
     
     // creo nodo
     if (nodo === null) { // creo nodo si no está creado
+        console.log("a crear nodo, improtando");
             
         //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
         const { createHelia } = await import('./libs/Helia_6.0.13_min.js');
@@ -1749,11 +1750,14 @@ async function nodo_conectar(){
         const { noise } = await import('./libs/libp2pnoise_17.0.0_min.js');
         const { yamux } = await import('./libs/libp2pyamux_8.0.1_min.js');
 
+
+        console.log("todo importado");
+
         const libp2p = await createLibp2p({
-            transports: [webRTC(), circuitRelayTransport()],
+            transports: [webRTC, circuitRelayTransport],
             connectionManager: { minConnections: 1, maxConnections: 2 },
-            connectionEncryption: [noise()],
-            streamMuxers: [yamux()]
+            connectionEncryption: [noise],
+            streamMuxers: [yamux]
           });
 
         helia = await createHelia({
@@ -1767,7 +1771,7 @@ async function nodo_conectar(){
 
         peerId = nodo.libp2p.peerId.toString(); //En modo efímero, el peerId cambia en cada sesión, No usarlo como identidad de usuario
         console.log(peerId);
-    }
+    } else {console.log("el nodo ya está creado")}
 }
 
 async function nodo_desconectar(){
