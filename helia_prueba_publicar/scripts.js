@@ -1,3 +1,4 @@
+//
 // estatus variables
 var escrituralibre = true; // escritura libre desplegada
 var eliminarlibros = "none"; // no se muestra globito para eliminar libro
@@ -1740,17 +1741,17 @@ async function nodo_conectar(){
     // creo nodo
     if (nodo === null) { // creo nodo si no está creado
         console.log("a crear nodo, improtando");
-            
+
         //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
-        import { createHelia } from 'helia';
-        import { unixfs } from '@helia/unixfs';
-        import { createLibp2p } from 'libp2p';
-        import { webSockets } from '@libp2p/websockets';
-        import { webRTC } from '@libp2p/webrtc';
-        import { circuitRelayTransport } from '@libp2p/circuit-relay-v2';
-        import { noise } from '@chainsafe/libp2p-noise';
-        import { yamux } from '@chainsafe/libp2p-yamux';
-        import { identify } from '@libp2p/identify';
+        //import { createHelia } from  'vendor-BuFZmFJP.js';
+        //import { unixfs } from 'vendor-BuFZmFJP.js';
+        //import { createLibp2p } from 'vendor-BuFZmFJP.js';
+        //import { webSockets } from 'vendor-BuFZmFJP.js';
+        //import { webRTC } from 'vendor-BuFZmFJP.js';
+        //import { circuitRelayTransport } from 'vendor-BuFZmFJP.js';
+        //import { noise } from 'vendor-BuFZmFJP.js';
+        //import { yamux } from 'vendor-BuFZmFJP.js';
+        //import { identify } from 'vendor-BuFZmFJP.js';
 
 
         console.log("todo importado");
