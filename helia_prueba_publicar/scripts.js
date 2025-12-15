@@ -1511,8 +1511,8 @@ async function envio_por_ipfs(motivo, mensaje){
         
         // agrego mensaje encriptado a ipfs
         barra_notificar("publicando_mensaje", "subiendo el mensaje", 'var(--alerta_naranja)', {animacion:'subiendo_mensaje'}); // mostrar status publicando mensaje a ipfs
-        let { cid } = await fs.addBytes(new TextEncoder().encode(mensaje_crip)) // devuelve variable cid
-        console.log(cid.toString());
+        const cid = await fs.addBytes(new TextEncoder().encode(mensaje_crip)) // devuelve variable cid
+        console.log("cid: " + cid.toString());
         
         // DESCARGO mismo CID para ver si queda por ahí online
         let chunks = [];
@@ -1523,7 +1523,7 @@ async function envio_por_ipfs(motivo, mensaje){
         
         
         // Obligo mensaje a pasar por GATEWAYs (quizás se expande más rápido el mensaje)
-        //await gateways(codigo_para_enviar);
+        // await gateways(cid.toString());
         
         barra_notificar("mensaje_subido", "mensaje subido 🗸", 'var(--alerta_naranja)', {animacion:'mensaje_subido'}); // mostrar status publicando mensaje a ipfs
         
@@ -1538,38 +1538,34 @@ async function recepcion_por_ipfs(motivo, palabras_clave_cid){
         // INICIALIZO NODO IPFS
         barra_notificar("inicializando_nodo", "conectando a la red ipfs", 'var(--alerta_naranja)', {animacion:'conectando'}); // mostrar status conectando
         
-        let publicKey = "";
-        if (nodo === null) { // creo nodo si no está creado
-            nodo = await Ipfs.create(); // creo nodo
-            publicKey = (await nodo.id())['publicKey']; // obtengo llave publica //quizas esté demás esto
-            console.log('Llave pública: '+publicKey);
-        } else {
-            publicKey = (await nodo.id())['publicKey']; // obtengo llave publica //quizas esté demás esto
-            console.log('Llave pública: '+publicKey);
-        }
-        
-        let nodo_status = nodo.isOnline() ? 'online' : 'offline';
-        console.log(nodo_status);
+        await nodo_conectar(); //crea nodo (si no existe)
+
+        // chequeo nodo
+        // console.log("nodote", nodo);
+        // return
+        // 
+        // let nodo_status = helia.libp2p.isStarted() ? 'online' : 'offline';
+        // console.log(nodo_status);
         
         // DESCARGA mensaje
         barra_notificar("descargando_mensaje", "buscando mensaje", 'var(--alerta_naranja)', {animacion:'subiendo_mensaje'}); // mostrar status buscando mensaje mensaje
         
-        let resolver = palabras_clave_cid.slice(-46);  // esto es la clave generada con el otro nodo
+        let resolver = palabras_clave_cid.slice(-59);  // esto es la clave generada con el otro nodo
         console.log("resolver:");
         console.log(resolver);
         
         // chequeo swarms a ver que onda
-        const addrs = await nodo.swarm.addrs();
+        const addrs = await nodo.libp2p.getMultiaddrs();
         console.log(addrs);
         
         await new Promise((resolve) => setTimeout(resolve, 2000)); // tiempo de espera
         
         
         // Obligo mensaje a pasar por GATEWAYs (quizás se expande más rápido el mensaje)
-        await gateways(resolver);
+        // await gateways(resolver);
         
         const chunks = [];
-        for await (let chunk of nodo.cat(resolver)) {
+        for await (const chunk of fs.cat(resolver)) {
             chunks.push(chunk);
         }
         
@@ -1705,7 +1701,7 @@ function barra_notificar(motivo, texto, color, dictionary){
 async function gateways(cid){
         console.log("probando gateways");
         try {
-            const response = await fetch(`https://cf-ipfs.com/ipfs/${cid}`, {
+            const response = await fetch(`https://ipfs.io/ipfs/${cid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/octet-stream'
@@ -1740,27 +1736,18 @@ async function nodo_conectar(){
     
     // creo nodo
     if (nodo === null) { // creo nodo si no está creado
-        console.log("a crear nodo, improtando");
-
-        //IMPORTO LIBRERÍAS A UTILIZAR (Heliam, moderno)
-        //import { createHelia } from  'vendor-BuFZmFJP.js';
-        //import { unixfs } from 'vendor-BuFZmFJP.js';
-        //import { createLibp2p } from 'vendor-BuFZmFJP.js';
-        //import { webSockets } from 'vendor-BuFZmFJP.js';
-        //import { webRTC } from 'vendor-BuFZmFJP.js';
-        //import { circuitRelayTransport } from 'vendor-BuFZmFJP.js';
-        //import { noise } from 'vendor-BuFZmFJP.js';
-        //import { yamux } from 'vendor-BuFZmFJP.js';
-        //import { identify } from 'vendor-BuFZmFJP.js';
-
-
-        console.log("todo importado");
-
         const libp2p = await createLibp2p({
             transports: [webRTC(), circuitRelayTransport()],
-            connectionManager: { minConnections: 1, maxConnections: 2 },
+            peerDiscovery: [
+                bootstrap({
+                  list: [ '/dns4/bootstrap.libp2p.io/tcp/443/wss/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN' ] })
+            ],
+            connectionManager: { minConnections: 3, maxConnections: 10 },
             connectionEncryption: [noise()],
-            streamMuxers: [yamux()]
+            streamMuxers: [yamux()],
+            services: {
+                identify: identify()   // ← OBLIGATORIO para WebRTC
+              }
           });
 
         helia = await createHelia({
@@ -1769,12 +1756,19 @@ async function nodo_conectar(){
           datastore: undefined
         });
 
-        nodo = await crearNodo(); //creo nodo
+        nodo = helia; //asigno nodo a variable
         fs = unixfs(nodo);
 
         peerId = nodo.libp2p.peerId.toString(); //En modo efímero, el peerId cambia en cada sesión, No usarlo como identidad de usuario
+        console.log("nodo PeerID: ", peerId);
+        // aguardo a que conecten al menos 1 par en la red antes de continuar y publicar algo
+        await nodo.libp2p.start();
+        await nodo.libp2p.waitForPeers?.(1);
+        console.log("el nodo ya tiene al menos un peer");
+    } else {
+        console.log("el nodo ya está creado, peerID:");
         console.log(peerId);
-    } else {console.log("el nodo ya está creado")}
+    }
 }
 
 async function nodo_desconectar(){

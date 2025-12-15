@@ -7,9 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="estilos.css">
     <script type="module" src="vendor-Dj-4lJax.js"></script> <!-- este bundle lo creé con npm (con la ayuda de Gémini: https://gemini.google.com/app/175b4d6d5603b117) -->
-    <!-- <script type="module" src="loader.js"></script> --> <!-- imoprta modulos de vendor y los hace globales -->
     <script src="scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" onerror="scriptalt('crypto')"></script> <!--  CRYPTO library (reemplazar por script local?)  -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" onerror="scriptalt('crypto')"></script> --> <!--  CRYPTO library (reemplazar por script local?)  -->
     <title>Notas</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📌</text></svg>">
 
@@ -167,6 +166,7 @@
     <script>
         function scriptalt(cualscript){
           //scripts alternativos LOCALES
+          console.log("falló carga de script online, se usa copia local: " + cualscript);
             try {
               if (cualscript == "crypto"){
                 var script = document.createElement('script');
